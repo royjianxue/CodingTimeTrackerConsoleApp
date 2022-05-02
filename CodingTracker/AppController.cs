@@ -61,7 +61,7 @@ public class AppController
             {
                 cmd.CommandText = "SELECT SUM(Hour) FROM CodingTracker";
                 var hours = cmd.ExecuteScalar();
-                double total = Convert.IsDBNull(hours) ? 0 : (double)hours;
+                double total = Math.Round(Convert.IsDBNull(hours) ? 0 : (double)hours);
 
                 if (total == 0)
                 {
