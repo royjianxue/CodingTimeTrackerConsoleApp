@@ -26,7 +26,6 @@ do
         case 2:
             AppController.GetTable();
             ProcessDataForInsertion();
-            doesAppContinue = true;
             break;
         case 3:
             AppController.GetTable();
@@ -47,11 +46,9 @@ do
 
 } while (doesAppContinue == true);
 
-
-
 void ProcessDataForDeletion()
 {
-    TableColumnHeaders headers = new TableColumnHeaders();
+    CodingSession headers = new CodingSession();
     bool doesIdExist;
     headers.Id = GetIntegerInput("\nPlease enter the ID number to delete associated records: ");
     doesIdExist = AppController.ValidateIDNumberExist(headers);
@@ -68,7 +65,7 @@ void ProcessDataForDeletion()
 
 void ProcessDataForUpdate()
 {
-    TableColumnHeaders headers = new();
+    CodingSession headers = new();
     bool doesIdExist;
     headers.Id = GetIntegerInput("\nPlease enter the ID number to update associated records: ");
     doesIdExist = AppController.ValidateIDNumberExist(headers);
@@ -80,10 +77,9 @@ void ProcessDataForUpdate()
     else
     {
         string date = GetDateInput("\nPlease Enter the date {format: dd-mm-yy}: ");
-        double time = GetHourInput("\nPlease Enter how much time you have spent on coding: ");
-
+        TimeSpan duration = GetDuration();
         headers.Date = date;
-        headers.Hours = time;
+        headers.Hours = Math.Round(duration.TotalHours, 2);
         AppController.Update(headers);
 
         Console.WriteLine("\nRecord Sucessfully Updated..");
@@ -93,59 +89,105 @@ void ProcessDataForUpdate()
 
 void ProcessDataForInsertion()
 {
-    TableColumnHeaders headers = new();
-    var date = GetDateInput("Please Enter the date {format: dd-mm-yy}: ");
-    var time = GetHourInput("Please Enter how much time you have spent on coding: ");
+    CodingSession headers = new();
+    var date = GetDateInput("\nPlease Enter the date {format: dd-mm-yy}: ");
+    var duration = GetDuration();
 
     headers.Date = date;
-    headers.Hours = time;
+    headers.Hours = Math.Round(duration.TotalHours, 2);
 
     AppController.Insert(headers);
     Console.WriteLine("\nRecord Successfully Inserted...");
 }
 
-static double GetHourInput(string selection)
+TimeSpan GetDuration()
 {
-    string? input;
-    bool isValidDouble = false;
-    double output = 0;
+
+    TimeSpan duration;
+    string? startTime;
+    string? endTime;
+    bool allConditionChecked = false;
     do
     {
-        Console.Write(selection);
-        input = Console.ReadLine();
-
-        if (!double.TryParse(input, out output))
+        do
         {
-            isValidDouble = false;
+            Console.Write("\nPlease enter the start time: Format: {hh:mm}: ");
+            startTime = Console.ReadLine();
+
+        } while (!IsTimeSpan(startTime));
+
+        do
+        {
+            Console.Write("\nPlease enter the end time: Format: {hh:mm}: ");
+            endTime = Console.ReadLine();
+
+        } while (!IsTimeSpan(endTime));
+
+        duration = DateTime.Parse(endTime).Subtract(DateTime.Parse(startTime));
+
+        if (duration.TotalHours >=0)
+        {
+            allConditionChecked = true;
         }
         else
         {
-            isValidDouble = true;
+            Console.WriteLine("\nEnd Time must be Greater than Start Time. Try Again!");
+            allConditionChecked =false;
         }
 
-    } while (isValidDouble == false && output > 0);
+    } while (allConditionChecked == false);
 
-    return output;
+    return duration;
+}
+
+bool IsTimeSpan(string time)
+{
+    if (TimeSpan.TryParseExact(time, "hh\\:mm", CultureInfo.InvariantCulture, out _))  
+    {
+        return true;
+    }
+    else
+    {
+        Console.WriteLine("\nTime entry format is invalid. Please try again!");
+        return false;
+    }
+
 }
 
 static string GetDateInput(string selection)
 {
     string? input;
+    DateTime date;
+    bool isValidDateFormat = false;
     bool isValidDate = false;
     do
     {
-        Console.Write(selection);
-        input = Console.ReadLine();
-        if (!DateTime.TryParseExact(input, "dd-MM-yy", new CultureInfo("en-US"), DateTimeStyles.None, out _))
+        do
         {
+            Console.Write(selection);
+            input = Console.ReadLine();
+            if (!DateTime.TryParseExact(input, "dd-MM-yy", new CultureInfo("en-US"), DateTimeStyles.None, out date))
+            {
+                isValidDateFormat = false;
+            }
+            else
+            {
+                isValidDateFormat = true;
+            }
+
+        } while (isValidDateFormat == false);
+
+        if (DateTime.Compare(date, DateTime.Now) > 0)
+        {
+            Console.WriteLine("\nDate entered must not be in the future. Please try again!");
             isValidDate = false;
         }
         else
         {
             isValidDate = true;
         }
-
     } while (isValidDate == false);
+    
 
     return input;
 }

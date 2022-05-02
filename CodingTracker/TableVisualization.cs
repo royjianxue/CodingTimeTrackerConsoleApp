@@ -4,7 +4,7 @@ using CodingTracker;
 
 public class TableVisualization
 {
-    internal static void ShowTable(List<TableColumnHeaders> tableData)
+    internal static void ShowTable(List<CodingSession> tableData)
     {
         Console.WriteLine("\n");
         ConsoleTableBuilder

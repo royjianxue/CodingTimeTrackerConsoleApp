@@ -3,7 +3,7 @@ using CodingTracker;
 
 public class AppController
 {
-    public static void Insert(TableColumnHeaders headers)
+    public static void Insert(CodingSession headers)
     {
         using(var conn = Database.CreateConnection())
         {
@@ -22,7 +22,7 @@ public class AppController
 
     public static void GetTable()
     {
-        List<TableColumnHeaders> tableData = new List<TableColumnHeaders>();
+        List<CodingSession> tableData = new List<CodingSession>();
 
         using (var conn = Database.CreateConnection())
         {
@@ -35,7 +35,7 @@ public class AppController
                     {
                         while (reader.Read())
                         {
-                            tableData.Add(new TableColumnHeaders
+                            tableData.Add(new CodingSession
                             {
                                 Id = reader.GetInt32(0),
                                 Date = reader.GetString(1),
@@ -76,7 +76,7 @@ public class AppController
         }
     }
 
-    internal static void Delete(TableColumnHeaders headers)
+    internal static void Delete(CodingSession headers)
     {
         using(var conn = Database.CreateConnection())
         {
@@ -89,7 +89,7 @@ public class AppController
         }
     }
 
-    internal static bool ValidateIDNumberExist(TableColumnHeaders headers)
+    internal static bool ValidateIDNumberExist(CodingSession headers)
     {
         using (var conn = Database.CreateConnection())
         {
@@ -112,7 +112,7 @@ public class AppController
         }
     }
 
-    internal static void Update(TableColumnHeaders headers)
+    internal static void Update(CodingSession headers)
     {
         using(var conn = Database.CreateConnection())
         {

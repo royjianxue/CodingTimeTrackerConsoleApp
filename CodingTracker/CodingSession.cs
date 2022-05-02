@@ -7,7 +7,7 @@ using System.Configuration;
 
 namespace CodingTracker
 {
-    public class TableColumnHeaders
+    public class CodingSession
     {
         public int Id { get; set; }
         public string? Date { get; set; }
