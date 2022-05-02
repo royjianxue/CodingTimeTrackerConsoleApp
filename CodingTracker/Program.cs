@@ -20,20 +20,22 @@ do
             ExitProgram();
             break;
         case 1:
-            AppController.GetTable();
-            doesAppContinue = true;
+            AppController.GetTable();           
             break;
         case 2:
             AppController.GetTable();
             ProcessDataForInsertion();
+            Console.Clear();
             break;
         case 3:
             AppController.GetTable();
             ProcessDataForUpdate();
+            Console.Clear();
             break;
         case 4:
             AppController.GetTable();
             ProcessDataForDeletion();
+            Console.Clear();
             break;
         case 5:
             AppController.GetHours();
