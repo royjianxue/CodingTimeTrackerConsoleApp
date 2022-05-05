@@ -1,5 +1,4 @@
 ﻿using ConsoleTableExt;
-using System.Data.SQLite;
 using CodingTracker;
 
 public class TableVisualization

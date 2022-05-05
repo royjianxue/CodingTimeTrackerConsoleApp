@@ -1,5 +1,4 @@
-﻿using System.Data.SQLite;
-using CodingTracker;
+﻿using CodingTracker;
 
 public class AppController
 {
